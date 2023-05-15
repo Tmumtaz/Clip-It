@@ -20,6 +20,13 @@ export class ModalService {
     }) 
   }
 
+  //remove modal with associated id to prevent memory leak
+  unregister(id: string) {
+    this.modals = this.modals.filter(
+      element => element.id !== id
+    )
+  }
+
   // method to return the visible value
   isModalOpen(id: string, ) : boolean {
     return !!this.modals.find(element => element.id === id)?.visible
