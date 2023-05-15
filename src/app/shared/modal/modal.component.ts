@@ -15,6 +15,7 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //move modal to root to fix CSS clash
     document.body.appendChild(this.el.nativeElement)
   }
 
