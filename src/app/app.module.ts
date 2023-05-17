@@ -8,6 +8,7 @@ import { NavComponent } from './nav/nav.component';
 import { SharedModule } from './shared/shared.module';
 import { ModalComponent } from './shared/modal/modal.component';
 import { FormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment.development';
 
 ModalComponent
 @NgModule({
@@ -19,7 +20,7 @@ ModalComponent
     BrowserModule,
     AppRoutingModule,
     UserModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
