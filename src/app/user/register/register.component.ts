@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-register',
@@ -8,7 +9,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
-  constructor(private auth: AngularFireAuth) {}
+  constructor(private auth: AngularFireAuth, private db: AngularFirestore) {}
 
   inSubmission = false;
 
@@ -46,7 +47,7 @@ export class RegisterComponent {
     this.showAlert = true;
     this.alertMsg = 'Please wait, your account is being created.';
     this.alertColor = 'blue';
-    this.inSubmission = true
+    this.inSubmission = true;
 
     const { email, password } = this.registerForm.value;
 
@@ -55,14 +56,20 @@ export class RegisterComponent {
         email as string,
         password as string
       );
-      console.log(userCredential)
+      //add document to collection
+      await this.db.collection('users').add({
+        name: this.name.value,
+        email: this.email.value,
+        age: this.age.value,
+        phoneNumber: this.phoneNumber.value,
+      });
     } catch (error) {
       console.error(error);
 
       this.alertMsg = 'An unexpected error occured, please try again';
       this.alertColor = 'red';
       this.inSubmission = false;
-      return
+      return;
     }
     this.alertMsg = 'Success! Your Account has been created';
     this.alertColor = 'green';
