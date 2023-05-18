@@ -5,18 +5,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserModule } from './user/user.module';
 import { NavComponent } from './nav/nav.component';
-import { SharedModule } from './shared/shared.module';
 import { ModalComponent } from './shared/modal/modal.component';
 import { FormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment.development';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth'
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { HomeComponent } from './home/home.component'
 ModalComponent
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
