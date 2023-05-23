@@ -15,6 +15,7 @@ import { HomeComponent } from './home/home.component'
 import { VideoModule } from './video/video.module';
 import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage'
 
 ModalComponent
 @NgModule({
@@ -34,6 +35,7 @@ ModalComponent
     AngularFirestoreModule,
     VideoModule,
     AppRoutingModule,
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent]
