@@ -26,7 +26,8 @@ export class UploadComponent implements OnDestroy {
   percentage = 0;
   showPercentage = false;
   user: firebase.User | null = null;
-  task?: AngularFireUploadTask
+  task?: AngularFireUploadTask;
+  screenshots: string[] = [] 
 
   title = new FormControl('', {
     validators: [Validators.required, Validators.minLength(3)],
@@ -65,7 +66,7 @@ export class UploadComponent implements OnDestroy {
       return;
     }
 
-    await this.ffmpegService.getScreenshots(this.file)
+    this.screenshots = await this.ffmpegService.getScreenshots(this.file)
 
     // set title
     this.title.setValue(this.file.name.replace(/\.[^/.]+$/, ''));

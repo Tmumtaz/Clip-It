@@ -27,15 +27,43 @@ export class FfmpegService {
 
     this.ffmpeg.FS('writeFile', file.name, data)
 
-    await this.ffmpeg.run(
-      //configure input file 
+    const seconds = [1,2,3]
+    const commands: string[] = []
+
+    seconds.forEach(second => {
+      commands.push(
+        //configure input file 
       '-i', file.name,
       // output options 
-      '-ss', '00:00:01',
+      '-ss', `00:00:0${second}`,
       '-frames:v', '1',
       '-filter:v', 'scale=510:-1',
       //create screenshot
-      'output_01.png'
+      `output_0${second}.png`
+      )
+    })
+
+    await this.ffmpeg.run(
+      ...commands
     )
+
+    const screenshots: string[] = []
+
+    seconds.forEach(second => {
+      // grab binary file
+      const screenshotFile = this.ffmpeg.FS('readFile',`output_0${second}.png` )
+
+      //convert binary into url(blob)
+      const screenshotBlob = new Blob(
+        [screenshotFile.buffer], {
+          type: 'image/png'
+        }
+      )
+      const screenshotURL = URL.createObjectURL(screenshotBlob)
+
+      screenshots.push(screenshotURL)
+    })
+
+    return screenshots
   }
 }
