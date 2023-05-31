@@ -7,65 +7,75 @@ import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 export class FfmpegService {
   isReady = false;
   isRunning = false;
-  private ffmpeg 
+  private ffmpeg;
 
   constructor() {
-    this.ffmpeg = createFFmpeg({ log: true })
+    this.ffmpeg = createFFmpeg({ log: true });
   }
 
   async init() {
-    if(this.isReady) {
-      return
+    if (this.isReady) {
+      return;
     }
 
     await this.ffmpeg.load();
 
-    this.isReady = true
+    this.isReady = true;
   }
 
-  async getScreenshots(file: File){
-    this.isRunning = true
-    const data = await fetchFile(file)
+  async getScreenshots(file: File) {
+    this.isRunning = true;
+    const data = await fetchFile(file);
 
-    this.ffmpeg.FS('writeFile', file.name, data)
+    this.ffmpeg.FS('writeFile', file.name, data);
 
-    const seconds = [1,2,3]
-    const commands: string[] = []
+    const seconds = [1, 2, 3];
+    const commands: string[] = [];
 
-    seconds.forEach(second => {
+    seconds.forEach((second) => {
       commands.push(
-        //configure input file 
-      '-i', file.name,
-      // output options 
-      '-ss', `00:00:0${second}`,
-      '-frames:v', '1',
-      '-filter:v', 'scale=510:-1',
-      //create screenshot
-      `output_0${second}.png`
-      )
-    })
+        //configure input file
+        '-i',
+        file.name,
+        // output options
+        '-ss',
+        `00:00:0${second}`,
+        '-frames:v',
+        '1',
+        '-filter:v',
+        'scale=510:-1',
+        //create screenshot
+        `output_0${second}.png`
+      );
+    });
 
-    await this.ffmpeg.run(
-      ...commands
-    )
+    await this.ffmpeg.run(...commands);
 
-    const screenshots: string[] = []
+    const screenshots: string[] = [];
 
-    seconds.forEach(second => {
+    seconds.forEach((second) => {
       // grab binary file
-      const screenshotFile = this.ffmpeg.FS('readFile',`output_0${second}.png` )
+      const screenshotFile = this.ffmpeg.FS(
+        'readFile',
+        `output_0${second}.png`
+      );
 
       //convert binary into url(blob)
-      const screenshotBlob = new Blob(
-        [screenshotFile.buffer], {
-          type: 'image/png'
-        }
-      )
-      const screenshotURL = URL.createObjectURL(screenshotBlob)
+      const screenshotBlob = new Blob([screenshotFile.buffer], {
+        type: 'image/png',
+      });
+      const screenshotURL = URL.createObjectURL(screenshotBlob);
 
-      screenshots.push(screenshotURL)
-    })
+      screenshots.push(screenshotURL);
+    });
     this.isRunning = false;
-    return screenshots
+    return screenshots;
+  }
+
+  async blobFromURL(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob()
+
+    return blob
   }
 }

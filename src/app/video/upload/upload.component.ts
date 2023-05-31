@@ -29,6 +29,7 @@ export class UploadComponent implements OnDestroy {
   task?: AngularFireUploadTask;
   screenshots: string[] = [] 
   selectedScreenshot = '';
+  screenshotTask?: AngularFireUploadTask
 
   title = new FormControl('', {
     validators: [Validators.required, Validators.minLength(3)],
@@ -71,7 +72,7 @@ export class UploadComponent implements OnDestroy {
     }
 
     this.screenshots = await this.ffmpegService.getScreenshots(this.file)
-    
+
     this.selectedScreenshot = this.screenshots[0]
 
     // set title
@@ -81,7 +82,7 @@ export class UploadComponent implements OnDestroy {
     this.nextStep = true;
   }
 
-  uploadFile() {
+  async uploadFile() {
     // stops the user editing the form while upload is in progress 
     this.uploadForm.disable()
 
@@ -94,8 +95,15 @@ export class UploadComponent implements OnDestroy {
     const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
 
+    const screenshotBlob = await this.ffmpegService.blobFromURL(
+      this.selectedScreenshot
+    )
+    const screenshotPath = `screenshots/${clipFileName}.png`
+
     this.task = this.storage.upload(clipPath, this.file);
     const clipRef = this.storage.ref(clipPath)
+
+    this.screenshotTask = this.storage.upload(screenshotPath, screenshotBlob)
 
     this.task.percentageChanges().subscribe((progress) => {
       this.percentage = (progress as number) / 100;
