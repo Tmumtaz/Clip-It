@@ -7,8 +7,7 @@
       <!-- Image -->
       <img
         class="card-img-top rounded-tl-2xl w-full"
-        src="clip.screenshotURL"
-        crossorigin
+        [src]="clip.screenshotURL" crossorigin
       />
 
       <!-- Shape -->
@@ -38,7 +37,7 @@
         <p class="mb-0">
         {{ clip.displayName }}
           &#183;
-          <span class="text-gray-400">{{ clip.timestamp }}</span>
+          <span class="text-gray-400">{{ clip.timestamp | fbTimestamp }}</span>
         </p>
       </div>
     </a>
