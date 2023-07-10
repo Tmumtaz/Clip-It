@@ -83,4 +83,20 @@ export class ManageComponent implements OnInit {
       }
     })
   }
+
+  async copyToClipboard($event: MouseEvent, docID: string | undefined ) {
+    $event.preventDefault()
+
+    if(!docID){
+      return
+    }
+
+    const url = `${location.origin}/clip/${docID}`
+
+    //copy text to clipboard
+    await navigator.clipboard.writeText(url)
+
+    //notify user
+    alert('Link Copied!')
+  }
 }
