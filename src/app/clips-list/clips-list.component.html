@@ -1,12 +1,12 @@
  <!-- Clips List -->
- <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-64">
     <a *ngFor="let clip of clipService.pageClips"
       [routerLink]="['/', 'clips', clip.docID]"
       class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary transform hover:-translate-y-2 hover:shadow-2xl transition duration-300"
     >
       <!-- Image -->
       <img
-        class="card-img-top rounded-tl-2xl w-full"
+        class="card-img-top rounded-tl-2xl object-cover w-full h-64"
         [src]="clip.screenshotURL" crossorigin
       />
 
